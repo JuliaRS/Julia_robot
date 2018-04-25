@@ -33,7 +33,6 @@ pyTelegramBotAPI==3.5.1
 python-dateutil==2.6.1
 python-telegram-bot==10.0.1
 pytz==2018.3
-pywin32==223
 requests==2.18.4
 s3transfer==0.1.13
 scipy==1.0.0

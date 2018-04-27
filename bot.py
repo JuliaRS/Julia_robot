@@ -14,12 +14,12 @@ JBot = telebot.TeleBot(config.token) # Julia Bot
 # start
 @JBot.message_handler(commands=['start','description'])
 def start(message):
-    JBot.send_message(message.chat.id,text = "Привет студент НИУ ВШЭ НН!\U0001F393 \nЯ Julia helper\U0001F60A\nЧтобы узнать чем я могу тебе помочь набери \"\help\"\nДавай немного отвлечемся от учёбы и пообщаемся?\U0001F47B")
+    JBot.send_message(message.chat.id,text = "Привет, студент НИУ ВШЭ НН!\U0001F393 \nЯ Julia helper\U0001F60A\nЧтобы узнать чем я могу тебе помочь, набери \"/help\"\nДавай немного отвлечемся от учёбы и пообщаемся?\U0001F47B")
 
 # help
 @JBot.message_handler(commands=['help'])	
 def help(message):
-    JBot.send_message(message.chat.id,"Я умею:\n\U00002714/today\n\U00002714/tomorrow\n\U00002714/monday(/tuesday, /wednesday, /thursday, /friday, /saturday) - расписание\n\U00002714/site\n\U00002714/weather\nА вообще давай лучше поболтаем?\U0001F60B")
+    JBot.send_message(message.chat.id,"Я умею:\n\U00002714/today\n\U00002714/tomorrow\n\U00002714/monday,/tuesday,/wednesday,\n/thursday,/friday,/saturday - расписание\n\U00002714/site\n\U00002714/weather\nДавай лучше поболтаем?\U0001F60B")
 	
 # текущая дата и время и погода
 @JBot.message_handler(commands=['today'])
@@ -28,7 +28,7 @@ def handle_today(message):
     l = list[0]
     response = ''
     emoji = weather.get_weatherEmoji(l[4])
-    response += '\U0001F4C5<b>{}</b> {} {},{}\n{}{}\n'.format(datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),l[1],l[2],l[3],emoji,l[4])
+    response += '\U0001F4C5<b>{}</b> {} {},{}\n{}{}\n'.format(datetime.datetime.now().strftime("%d.%m.%Y %H:%M"),l[1],l[2],l[3],emoji,l[4])
     JBot.send_message(message.chat.id, response, parse_mode='HTML')
 	
 # дата и погода на завтра
@@ -38,9 +38,7 @@ def handle_today(message):
     l = list[1]
     response = ''
     emoji = weather.get_weatherEmoji(l[4])
-    date = ""
-    for i in range(10):
-        date += l[0][i]
+    date = (datetime.datetime.now()+datetime.timedelta(days=1)).strftime("%d.%m.%Y")
     response += '\U0001F4C5<b>{}</b> {} {},{}\n{}{}\n'.format(date,l[1],l[2],l[3],emoji,l[4])
     JBot.send_message(message.chat.id, response,parse_mode='HTML')	
 	

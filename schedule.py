@@ -8,13 +8,13 @@ def get_table(group, groupid):
     today = datetime.date.today()	
 	# берём текущую неделю, будем выводить расписание не текущую неделю, если воскресенье, то на следующую
     if (datetime.datetime.now().isoweekday() == 7):
-        fromdate = (today - datetime.timedelta(days=1)).strftime("%Y.%m.%d")
+        fromdate = (today + datetime.timedelta(days=1)).strftime("%Y.%m.%d")
         todate = (today + datetime.timedelta(days=6)).strftime("%Y.%m.%d")
     else:
         fromdate = (today - datetime.timedelta(days=today.weekday())).strftime("%Y.%m.%d")
         todate = (today + datetime.timedelta(days=5-today.weekday())).strftime("%Y.%m.%d")
-    config.ARGS = config.ARGS.format(fromdate, todate, groupid)
-    URL = ''.join((config.DOMAIN, config.ADDR, config.ARGS))
+    ARGS = config.ARGS.format(fromdate, todate, groupid)
+    URL = ''.join((config.DOMAIN, config.ADDR, ARGS))
     session = Session()
     response = session.get(URL)
     table = response.json()   
@@ -109,7 +109,7 @@ def get_dayNumberOfWeek(day):
 	
 def get_schedule(table, dayOfWeek): 
     lessons = table.get('Lessons')
-    date = datetime.date.today().strftime("%Y.%m.%d")
+    date = (datetime.date.today() + datetime.timedelta(days=(dayOfWeek - datetime.date.today().weekday()-1))).strftime("%d.%m.%Y")
     time_list=[]
     location_list=[]
     discipline_list=[]
@@ -122,6 +122,7 @@ def get_schedule(table, dayOfWeek):
     if i == len(lessons):
 	    return date, time_list, location_list, auditorium_list, discipline_list, type_list, lecturer_list
     date = lessons[i]['date']
+    date = date[8]+date[9]+"."+date[5]+date[6]+"."+date[0]+date[1]+date[2]+date[3]
     while i < len(lessons) and lessons[i]['dayOfWeek'] == dayOfWeek:
         auditorium_list.append(lessons[i]['auditorium'])
         time_list.append(lessons[i]['beginLesson'])
